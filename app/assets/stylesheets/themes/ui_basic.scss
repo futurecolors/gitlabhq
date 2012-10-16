@@ -47,4 +47,60 @@
       }
     }
   }
+
+  /**
+  * Wiki looks improvements by Artem Golikoff
+  **/
+  .file_holder .file_content.wiki {
+    max-width: 800px;
+    font-size: 15px;
+    font-family: Helvetica, Arial, sans-serif;
+    line-height: 20px;
+  }
+  .file_content.wiki ul li {
+    list-style: none;
+  }
+  .file_content.wiki li {
+    margin-bottom: 9px;
+  }
+  .file_content.wiki ul li:before {
+    content: "—";
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    margin-left: -20px;
+  }
+  .file_content.wiki ul li p {
+    display: inline-block;
+  }
+  .file_holder h1 {
+    margin: 0 0 9px;
+    line-height: 30px !important;
+    font-size: 30px;
+  }
+  .file_holder h2 {
+    margin: 30px 0 9px;
+    line-height: 30px !important;
+    font-size: 26px;
+  }
+  .file_holder h3 {
+    margin: 20px 0 9px;
+    line-height: 26px !important;
+    font-size: 20px;
+  }
+  .file_holder h4 {
+    margin: 10px 0 0;
+    line-height: 20px;
+    font-size: 17px;
+  }
+  .file_holder h1,
+  .file_holder h2,
+  .file_holder h3,
+  .file_holder h4 {
+    font-weight: normal;
+    font-family: Georgia, serif;
+  }
+  .highlight {
+    display: inline-block;
+  }
 }
