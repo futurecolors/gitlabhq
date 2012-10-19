@@ -28,15 +28,15 @@ module Gitlab
 
     def process
       Grit::Git.with_timeout(30.seconds) do
-        lock_file = File.join(Rails.root, "tmp", "merge_repo_#{project.path}.lock")
+        lock_file = Rails.root.join("tmp", "#{project.path}.lock")
 
         File.open(lock_file, "w+") do |f|
           f.flock(File::LOCK_EX)
 
           unless project.satellite.exists?
-            raise "You should run: rake gitlab:app:enable_automerge"
+            raise "Satellite doesn't exist"
           end
-          
+
           project.satellite.clear
 
           Dir.chdir(project.satellite.path) do
