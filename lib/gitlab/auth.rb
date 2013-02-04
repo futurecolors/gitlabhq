@@ -20,8 +20,9 @@ module Gitlab
     def create_from_omniauth(auth, ldap = false)
       provider = auth.provider
       uid = auth.info.uid || auth.uid
-      name = auth.info.name.force_encoding("utf-8")
-      email = auth.info.email.downcase unless auth.info.email.nil?
+      uid = uid.to_s.force_encoding("utf-8")
+      name = auth.info.name.to_s.force_encoding("utf-8")
+      email = auth.info.email.to_s.downcase unless auth.info.email.nil?
 
       ldap_prefix = ldap ? '(LDAP) ' : ''
       raise OmniAuth::Error, "#{ldap_prefix}#{provider} does not provide an email"\
@@ -34,10 +35,11 @@ module Gitlab
         extern_uid: uid,
         provider: provider,
         name: name,
+        username: email.match(/^[^@]*/)[0],
         email: email,
         password: password,
         password_confirmation: password,
-        projects_limit: Gitlab.config.default_projects_limit,
+        projects_limit: Gitlab.config.gitlab.default_projects_limit,
       }, as: :admin)
       if Gitlab.config.omniauth['block_auto_created_users'] && !ldap
         @user.blocked = true
@@ -48,8 +50,12 @@ module Gitlab
 
     def find_or_new_for_omniauth(auth)
       provider, uid = auth.provider, auth.uid
+      email = auth.info.email.downcase unless auth.info.email.nil?
 
       if @user = User.find_by_provider_and_extern_uid(provider, uid)
+        @user
+      elsif @user = User.find_by_email(email)
+        @user.update_attributes(:extern_uid => uid, :provider => provider)
         @user
       else
         if Gitlab.config.omniauth['allow_single_sign_on']
